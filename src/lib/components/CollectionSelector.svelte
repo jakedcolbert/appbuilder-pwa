@@ -12,6 +12,7 @@ Book Collection Selector component.
     let modalId = 'collectionSelector';
     let docSet = $refs.docSet;
     let modal;
+
     export function showModal() {
         modal.showModal();
     }
