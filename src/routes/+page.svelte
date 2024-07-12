@@ -300,6 +300,11 @@
         }
     });
 
+    $: fullscreen = false;
+    function toggleFullscreen() {
+        fullscreen = !fullscreen && config.mainFeatures['full-screen-double-tap'];
+    }
+
     let textCopied = false;
     function onTextCopy() {
         textCopied = true;
@@ -315,12 +320,13 @@
             goto(`${base}/contents/${menuId}`);
         }
     }
-    $: showBackButton = contents?.features?.['navigation-type'] === 'up' && $contentsStack.length > 0
+    $: showBackButton =
+        contents?.features?.['navigation-type'] === 'up' && $contentsStack.length > 0;
 </script>
 
 <div class="grid grid-rows-[auto,1fr,auto]" style="height:100vh;height:100dvh;">
-    <div class="navbar">
-        <Navbar on:backNavigation={handleBackNavigation} showBackButton={showBackButton}>
+    <div class="navbar {fullscreen ? 'hidden' : ''}">
+        <Navbar on:backNavigation={handleBackNavigation} {showBackButton}>
             <div
                 slot="left-buttons"
                 class={showOverlowMenu ? 'hidden md:flex flex-nowrap' : 'flex flex-nowrap'}
@@ -436,7 +442,8 @@
                     <ChevronIcon size={36} color={'gray'} deg={$direction === 'ltr' ? 180 : 0} />
                 </button>
             </div>
-            <div class="basis-5/6 max-w-screen-md">
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div on:dblclick={() => toggleFullscreen()} class="basis-5/6 max-w-screen-md">
                 <div class="p-2 w-full">
                     <main>
                         <div
